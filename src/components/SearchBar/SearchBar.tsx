@@ -1,12 +1,16 @@
 import toast from "react-hot-toast";
 
-import styles from "./SearchBar.module.css";
+import { SearchBarProps } from "../types";
 
-const SearchBar = ({ setSearchValue, resetSearch }) => {
-  const handleSubmit = (event) => {
+import styles from "./SearchBar.module.css";
+import { FormEvent } from "react";
+
+const SearchBar: React.FC<SearchBarProps> = ({ setSearchValue, resetSearch }) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    const userValue = event.target.elements.input.value.trim();
+    const form = event.target as HTMLFormElement;
+    const userValue = (form.elements.namedItem("input") as HTMLInputElement).value.trim();
 
     if (!userValue) {
       toast.error("This field must be filled.");
@@ -14,7 +18,7 @@ const SearchBar = ({ setSearchValue, resetSearch }) => {
     }
     resetSearch();
     setSearchValue(userValue);
-    event.target.reset();
+    form.reset();
   };
 
   return (

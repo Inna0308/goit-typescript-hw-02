@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import toast, { Toaster } from "react-hot-toast";
+
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
@@ -9,25 +11,26 @@ import ImageModal from "./components/ImageModal/ImageModal";
 
 import fetchImages from "./fetchImages";
 
+import { Image } from "./components/types";
+
 import "./App.css";
-import toast, { Toaster } from "react-hot-toast";
 
 function App() {
-  const [searchValue, setSearchValue] = useState("");
-  const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
-  const [totalPages, setTotalPages] = useState(0);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [images, setImages] = useState<Image[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   useEffect(() => {
     const getImages = async () => {
       if (searchValue) {
         try {
           setIsLoading(true);
-          setError(null);
+          setError(false);
           const { images: fetchedImages, totalPages } = await fetchImages(searchValue, page);
 
           if (fetchedImages.length === 0 && page === 1) {
@@ -37,7 +40,7 @@ function App() {
           setImages((prevImages) => (page === 1 ? fetchedImages : [...prevImages, ...fetchedImages]));
           setTotalPages(totalPages);
         } catch (error) {
-          setError(error);
+          setError(true);
         } finally {
           setIsLoading(false);
         }
@@ -47,24 +50,24 @@ function App() {
     getImages();
   }, [searchValue, page]);
 
-  const resetSearch = () => {
+  const resetSearch = (): void => {
     setPage(1);
     setSearchValue("");
     setImages([]);
     setTotalPages(0);
   };
 
-  const loadMore = () => {
+  const loadMore = (): void => {
     setPage((prevPage) => prevPage + 1);
   };
 
-  function openModal(image) {
+  function openModal(image: string): void {
     setSelectedImage(image);
     setModalIsOpen(true);
   }
 
-  function closeModal() {
-    setSelectedImage(null);
+  function closeModal(): void {
+    setSelectedImage("");
     setModalIsOpen(false);
   }
 

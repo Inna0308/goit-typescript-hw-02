@@ -1,14 +1,15 @@
 import ImageCard from "../ImageCard/ImageCard";
 
+import { ImageGalleryProps } from "../types";
+
 import styles from "./ImageGallery.module.css";
 
-const ImageGallery = ({ images, openModal }) => {
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, openModal }) => {
   return (
     <ul className={styles.gallery}>
       {images.map((image) => (
         <li className={styles.galleryItem} key={image.id}>
           <ImageCard
-            className={styles.image}
             urls={image.urls}
             likes={image.likes}
             alt_description={image.alt_description}
