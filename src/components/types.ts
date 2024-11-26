@@ -37,3 +37,13 @@ export interface SearchBarProps {
   setSearchValue: (userValue: string) => void;
   resetSearch: () => void;
 }
+
+export interface UnsplashApiResponse {
+  results: Image[];
+  total_pages: number;
+}
+
+export interface FetchImagesResponse {
+  images: Image[];
+  totalPages: number;
+}
